@@ -14,9 +14,6 @@ export class Product {
   @Column()
   vendor: string;
 
-  @Column()
-  title: string;
-
   @Column({ nullable: true })
   vendorTitle: string;
 
@@ -30,7 +27,7 @@ export class Product {
   backupVendorSKU: string;
 
   @Column({ nullable: true })
-  restockable: string;
+  restockable: boolean;
 
   @Column()
   vendorOrderUnit: string;
@@ -57,7 +54,10 @@ export class Product {
   casePack: string;
 
   @Column({ nullable: true })
-  piecesPerInternalBox: string;
+  piecesPerInternalBox: number;
+
+  @Column({ nullable: true })
+  boxesPerCase: number;
 
   @Column({ nullable: true })
   tag1: string;
@@ -74,12 +74,12 @@ export class Product {
   @Column({ nullable: true })
   hamzat: string;
 
-  @Column({ default: false })
+  @Column()
   active: boolean;
 
   @Column({ nullable: true })
   ignoreUntil: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'text' })
   notes: string;
 }

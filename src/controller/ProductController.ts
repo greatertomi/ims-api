@@ -1,8 +1,84 @@
 import { Request, Response } from 'express';
+import {
+  BAD_REQUEST_CODE,
+  NOT_FOUND_CODE,
+  SERVER_ERROR
+} from '../utils/constants';
+import { getRepository } from 'typeorm';
+import { Product } from '../entity/Product';
+import { Location } from '../entity/Location';
 
 class ProductController {
   static allProducts = async (req: Request, res: Response) => {
-    res.send({ message: 'Fetching all products' });
+    try {
+      const productRepository = getRepository(Product);
+      const products = await productRepository.find();
+      res.send(products);
+    } catch (err) {
+      console.error(err);
+      return res
+        .status(SERVER_ERROR.code)
+        .send({ message: SERVER_ERROR.message });
+    }
+  };
+
+  static oneProduct = async (req: Request, res: Response) => {
+    try {
+      const productId = req.params.id;
+      const productRepository = getRepository(Product);
+      const locationRepository = getRepository(Location);
+      const product = await productRepository.findOne(productId);
+      if (!product) {
+        return res
+          .status(NOT_FOUND_CODE)
+          .send({ message: 'Product with this id does not exist' });
+      }
+      const locations = await locationRepository.find({ product: product.id });
+      res.send({ ...product, locations });
+    } catch (err) {
+      console.error(err);
+      return res
+        .status(SERVER_ERROR.code)
+        .send({ message: SERVER_ERROR.message });
+    }
+  };
+
+  static updateProductQuantity = async (req: Request, res: Response) => {
+    try {
+      const { productId, location, newQuantity, action } = req.body;
+      const locationRepository = getRepository(Location);
+      const productLocation = await locationRepository.findOne({
+        location,
+        product: productId
+      });
+      if (!productLocation) {
+        return res
+          .status(NOT_FOUND_CODE)
+          .send({ message: 'This product does not exist for this location' });
+      }
+
+      if (action === 'subtract' && newQuantity > productLocation.quantity) {
+        return res
+          .status(BAD_REQUEST_CODE)
+          .send({ message: 'newQuantity too large' });
+      }
+
+      const adjustedQuantity =
+        action === 'subtract'
+          ? productLocation.quantity - newQuantity
+          : productLocation.quantity + newQuantity;
+      const updateResult = await locationRepository.update(
+        { location, product: productId },
+        { quantity: adjustedQuantity }
+      );
+      const data = { productId, location, newQuantity: adjustedQuantity };
+      res.send({ message: 'Product updated successfully', data });
+    } catch (err) {
+      console.error(err);
+      return res
+        .status(SERVER_ERROR.code)
+        .send({ message: SERVER_ERROR.message });
+    }
   };
 }
 
