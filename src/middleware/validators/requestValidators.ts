@@ -1,6 +1,5 @@
 import { body } from 'express-validator';
 
-// productId, location, newQuantity, action
 export const validateProduct = [
   body('productId', 'ProductId is required').notEmpty(),
   body('location', 'Location is required').notEmpty(),
