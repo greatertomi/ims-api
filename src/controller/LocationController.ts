@@ -1,7 +1,7 @@
-import { SERVER_ERROR } from '../utils/constants';
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Location } from '../entity/Location';
+import { SERVER_ERROR } from '../utils/constants';
 
 class LocationController {
   static fetchProductForLocation = async (req: Request, res: Response) => {

@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
+import { getRepository } from 'typeorm';
+import { Location } from '../entity/Location';
+import { Product } from '../entity/Product';
 import {
   BAD_REQUEST_CODE,
   NOT_FOUND_CODE,
   SERVER_ERROR
 } from '../utils/constants';
-import { getRepository } from 'typeorm';
-import { Product } from '../entity/Product';
-import { Location } from '../entity/Location';
 
 class ProductController {
   static allProducts = async (req: Request, res: Response) => {
@@ -45,7 +45,8 @@ class ProductController {
 
   static updateProductQuantity = async (req: Request, res: Response) => {
     try {
-      const { productId, location, newQuantity, action } = req.body;
+      const productId = +req.params.id;
+      const { location, newQuantity, action } = req.body;
       const locationRepository = getRepository(Location);
       const productLocation = await locationRepository.findOne({
         location,
