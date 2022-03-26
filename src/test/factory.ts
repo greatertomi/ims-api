@@ -4,7 +4,6 @@ import { createServer, Server as HttpServer } from 'http';
 import 'reflect-metadata';
 import supertest from 'supertest';
 import { Connection, ConnectionOptions, createConnection } from 'typeorm';
-import { testDatabaseCredential } from '../config/db';
 import routes from '../routes';
 
 process.env.NODE_ENV = 'test';
@@ -17,7 +16,16 @@ export class TestFactory {
 
   private _server: HttpServer;
 
-  private options: ConnectionOptions = testDatabaseCredential;
+  private options: ConnectionOptions = {
+    type: 'postgres',
+    host: process.env.TEST_POSTGRES_HOST,
+    port: +process.env.TEST_POSTGRES_PORT,
+    username: process.env.TEST_POSTGRES_USERNAME,
+    password: process.env.TEST_POSTGRES_PASSWORD,
+    database: process.env.TEST_POSTGRES_DATABASE,
+    synchronize: true,
+    entities: ['src/entity/**/*.ts']
+  };
 
   public get app(): supertest.SuperTest<supertest.Test> {
     return supertest(this._app);
