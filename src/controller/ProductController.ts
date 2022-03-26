@@ -67,7 +67,7 @@ class ProductController {
         action === 'subtract'
           ? productLocation.quantity - newQuantity
           : productLocation.quantity + newQuantity;
-      const updateResult = await locationRepository.update(
+      await locationRepository.update(
         { location, product: productId },
         { quantity: adjustedQuantity }
       );
