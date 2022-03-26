@@ -12,8 +12,20 @@ class ProductController {
   static allProducts = async (req: Request, res: Response) => {
     try {
       const productRepository = getRepository(Product);
+      const locationRepository = getRepository(Location);
       const products = await productRepository.find();
-      res.send(products);
+      const productLocations = await locationRepository.find({
+        order: {
+          id: 'ASC'
+        }
+      });
+      const productsWithQuantity = products.map((product) => {
+        const totalQuantity = productLocations
+          .filter((e) => e.productId === product.id)
+          .reduce((a, b) => a + b.quantity, 0);
+        return { ...product, totalQuantity };
+      });
+      res.send(productsWithQuantity);
     } catch (err) {
       console.error(err);
       return res
@@ -33,7 +45,9 @@ class ProductController {
           .status(NOT_FOUND_CODE)
           .send({ message: 'Product with this id does not exist' });
       }
-      const locations = await locationRepository.find({ product: product.id });
+      const locations = await locationRepository.find({
+        productId: product.id
+      });
       res.send({ ...product, locations });
     } catch (err) {
       console.error(err);
@@ -50,7 +64,7 @@ class ProductController {
       const locationRepository = getRepository(Location);
       const productLocation = await locationRepository.findOne({
         location,
-        product: productId
+        productId
       });
       if (!productLocation) {
         return res
@@ -69,7 +83,7 @@ class ProductController {
           ? productLocation.quantity - newQuantity
           : productLocation.quantity + newQuantity;
       await locationRepository.update(
-        { location, product: productId },
+        { location, productId },
         { quantity: adjustedQuantity }
       );
       const data = { productId, location, newQuantity: adjustedQuantity };

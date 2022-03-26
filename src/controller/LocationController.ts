@@ -9,7 +9,7 @@ class LocationController {
     try {
       const locationRepository = getRepository(Location);
       const productLocations = await locationRepository.find({
-        product: productId
+        productId
       });
       res.send(productLocations);
     } catch (err) {

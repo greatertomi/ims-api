@@ -1,11 +1,11 @@
-import 'reflect-metadata';
-import { createConnection } from 'typeorm';
-import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import express, { Request, Response } from 'express';
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
 import routes from './routes';
-import { Request, Response } from 'express';
 import handleWrongRoute from './utils/handleWrongRoute';
+
 require('dotenv').config();
 
 const main = async () => {
@@ -25,7 +25,7 @@ const main = async () => {
       console.log(`Server started on port ${PORT}`);
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
