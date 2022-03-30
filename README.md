@@ -18,3 +18,8 @@ Simple api for inventory management
 - Postgresql
 - TypeORM
 - mocha & chai
+
+
+## Note
+
+- To prepopulate the database, you can run the scripts in /src/utils/scripts. Make sure you run `seedTestData.sql` on a different database.

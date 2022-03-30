@@ -77,11 +77,12 @@ class ProductController {
           .status(BAD_REQUEST_CODE)
           .send({ message: 'newQuantity too large' });
       }
+      const quantity = parseInt(newQuantity, 10);
 
       const adjustedQuantity =
         action === 'subtract'
-          ? productLocation.quantity - newQuantity
-          : productLocation.quantity + newQuantity;
+          ? productLocation.quantity - quantity
+          : productLocation.quantity + quantity;
       await locationRepository.update(
         { location, productId },
         { quantity: adjustedQuantity }

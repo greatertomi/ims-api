@@ -77,5 +77,5 @@ true,null,null,null,21,45,null,null,null,null,null,null,'Last man','Piece',null,
 ('Core-00029','T-A-P Orange Cleaning Spray - Neutral Citrus  - 32 oz - 1 Bottle','Vendor 79',null,'SKU 6082','Vendor 3','SKU 61005',
 true,null,'Get the best in town',null,18,13,'Lambast','magnet',null,null,null,null,null,'Piece',null,10,30,55, true),
 
-('Core-000018','Gift Box - Red & White - 4 x 3.5 x 3 inches - Magnetic Closure - 1 Box','Vendor 84',null,'SKU 89084','Vendor 49','SKU 84846',
+('Core-000030','Gift Box - Red & White - 4 x 3.5 x 3 inches - Magnetic Closure - 1 Box','Vendor 84',null,'SKU 89084','Vendor 49','SKU 84846',
 true,null,null,null,12,15,null,null,null,null,18,null,null,'Piece',null,20,180,null, true);
